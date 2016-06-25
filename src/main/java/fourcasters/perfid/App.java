@@ -4,7 +4,11 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 /**
- * Hello world!
+ * VM  args: 
+ * -XX:+UnlockDiagnosticVMOptions
+ * -XX:+TraceClassLoading
+ * -XX:+LogCompilation
+ * -XX:+PrintAssembly
  *
  */
 public class App 
@@ -15,6 +19,11 @@ public class App
 
     public static void main( String[] args )
     {
+    	//TODO evenly distribute samples by order of magnitude.
+    	//TODO use jmh.
+    	//TODO allow speedy formatter to be customised for number of decimals and trailing zeroes.
+    	//TODO Explore n^round(log_10(n)) rather than the long list of if/elseif/else
+    	
         final Random r = new Random(System.currentTimeMillis());
         final StringBuffer sb = new StringBuffer(512);
         final DecimalFormat df = new DecimalFormat("###.00########");
