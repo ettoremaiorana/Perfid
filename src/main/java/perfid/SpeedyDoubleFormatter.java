@@ -1,4 +1,4 @@
-package fourcasters.perfid;
+package perfid;
 
 import java.util.Arrays;
 
