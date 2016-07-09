@@ -6,7 +6,6 @@ public class SpeedyDoubleFormatter {
 
 	private static final long doubleSignMask  = 0x8000000000000000L;
 	private static final long doubleExpMask   = 0x7ff0000000000000L;
-	//private static final long doubleFractMask = (doubleSignMask | doubleExpMask);
 	private static final int doubleExpShift = 52;
 	private static final int doubleExpBias = 1023;
 	private static final char[] charForDigit = {
@@ -19,12 +18,15 @@ public class SpeedyDoubleFormatter {
 	public static final char[] DOUBLE_ZERO0 = {'0','.'};
 	public static final char[] DOT_ZERO = {'.','0'};
 	public static final double[] d_magnitudes = new double[323+308+1];
+	public static final double[] i_d_magnitudes = new double[323+308+1];
 	public static final char[][] ZEROS = new char[323+308+1][];
 
 	static {
 		for (int i = -323; i <= 308; i++) {
 			int offset = i+323;
 			d_magnitudes[offset] = Math.pow(10, i);
+			i_d_magnitudes[offset] = 1./d_magnitudes[offset];
+			
 			final char[] chars = new char[offset+1];
 			for (int j = 0; j < offset+1; j++) {
 				chars[j] = '0';
@@ -38,7 +40,7 @@ public class SpeedyDoubleFormatter {
 	}
 
 
-	public static final void append(StringBuffer sb, double d) {
+	public static final void append(StringBuilder sb, double d) {
 		try {
 			if (d == 0.0) {
 				if ((Double.doubleToLongBits(d) & doubleSignMask) != 0) {
@@ -127,7 +129,7 @@ public class SpeedyDoubleFormatter {
 					i = i%10 >= 5 ? (i/10) + 1 : i/10;
 					appendFractDigits(sb, i, 1);
 					sb.append('E');
-					append(sb,magnitude);
+					sb.append(magnitude);
 
 				} 
 			}
@@ -162,14 +164,15 @@ public class SpeedyDoubleFormatter {
 		}
 	} 
 
-	private static void appendFractDigits(StringBuffer sb, long i, int decimalOffset)
+	private static void appendFractDigits(StringBuilder sb, long i, int decimalOffset)
 	{
 		int mag = magnitude(i);
 		long c;
 		while ( i > 0 )
 		{
 			long exp = (long)d_magnitudes[mag+323];
-			c = i/exp;
+			double i_exp = i_d_magnitudes[mag+323];
+			c = (long) (i*i_exp);
 			sb.append(charForDigit[(int) c]);
 			decimalOffset--;
 			if (decimalOffset == 0)

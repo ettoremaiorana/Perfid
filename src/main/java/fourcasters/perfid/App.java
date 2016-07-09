@@ -25,8 +25,8 @@ public class App
     	//TODO Explore n^round(log_10(n)) rather than the long list of if/elseif/else
     	
         final Random r = new Random(System.currentTimeMillis());
-        final StringBuffer sb = new StringBuffer(512);
-        final DecimalFormat df = new DecimalFormat("###.00########");
+        final StringBuilder sb = new StringBuilder(512);
+        final DecimalFormat df = new DecimalFormat();
 
         
         double[] records = new double[SIZE];
